@@ -1,110 +1,43 @@
 # LingoLift
 
-**LingoLift** is a modern, offline-first language learning application designed to help you master new vocabulary and concepts through **Spaced Repetition (SRS)**. 
+[English](#english) | [中文](#chinese)
 
-Built with a robust **Go** backend and a responsive **React** frontend, LingoLift ensures you can study anytime, anywhere—even without an internet connection—while keeping your progress synchronized across devices.
+<a name="english"></a>
+## English
 
-## 🚀 Key Features
+LingoLift is a comprehensive language learning platform featuring a mobile-first web app, a desktop client, and a synchronization server.
 
-*   **🧠 Spaced Repetition System (SRS):** Implements the proven **SuperMemo-2 (SM-2)** algorithm to schedule reviews at the optimal time for long-term retention.
-*   **⚡️ Offline-First Architecture:** The app works fully offline using a local database (IndexedDB). Your progress, new cards, and edits automatically sync with the server when you're back online.
-*   **📚 Multimedia Lessons:** Create comprehensive lessons with support for **Audio** (MP3) and **PDF** attachments.
-*   **📝 Rich Text Flashcards:** Full **Markdown** support for flashcards, allowing you to use bolding, lists, code blocks, and more in your study materials.
-*   **🏷️ Tagging System:** Organize your lessons and vocabulary with a flexible tag system. Filter by tags on the homepage and vocabulary list.
-*   **🔄 Seamless Synchronization:** Robust sync engine handles data merging, conflict resolution (server-wins strategy), and soft deletions.
-*   **🌍 Multi-Language UI:** Native support for **English** and **Chinese (Simplified)** interfaces.
-*   **📱 Responsive Design:** Optimized for both desktop and mobile web experiences.
+### Project Structure
 
-## 🛠️ Tech Stack
+- **`app/`**: The mobile-first web application (React + TypeScript + Vite).
+- **`server/`**: The backend server (Go + Gin + GORM + SQLite). Handles synchronization and serves the web app.
+- **`desktop/`**: The desktop client (Wails 3 + React). Wraps the `app` code into a native desktop application.
 
-### Frontend (Client App & Server Web UI)
-*   **Framework:** React 18, TypeScript
-*   **Build Tool:** Vite
-*   **Styling:** TailwindCSS, Lucide React (Icons)
-*   **Local Storage:** IndexedDB (Native API)
-*   **State Management:** React Hooks & Context API
+### Getting Started
 
-### Backend (Server)
-*   **Language:** Go (Golang)
-*   **Web Framework:** Gin
-*   **ORM:** GORM
-*   **Database:** SQLite (Embedded, zero-config)
-*   **Authentication:** JWT (JSON Web Tokens)
+Please refer to the README in each directory for specific instructions:
 
-## 📂 Project Structure
+- [Mobile/Web App Documentation](app/README.md)
+- [Server Documentation](server/README.md)
+- [Desktop Client Documentation](desktop/README.md)
 
-*   **`app/`**: The standalone client application (PWA-ready). This is the primary interface for users, featuring offline capabilities and sync logic.
-*   **`server/`**: The backend API server written in Go.
-    *   **`server/web/`**: The web interface served directly by the Go server (embedded). It provides a browser-based way to manage content and view progress.
-    *   **`server/internal/`**: Core backend logic (Handlers, Models, DB, Middleware).
-    *   **`server/uploads/`**: Directory for storing uploaded lesson assets (Audio/PDF).
+---
 
-## 🏁 Getting Started
+<a name="chinese"></a>
+## 中文 (Chinese)
 
-### Prerequisites
-*   **Node.js** (v18+)
-*   **Go** (v1.20+)
-*   **Docker** (Optional, for containerized deployment)
+LingoLift 是一个全面的语言学习平台，包含移动端优先的 Web 应用、桌面客户端和同步服务器。
 
-### 1. Running the Server
+### 项目结构
 
-The server handles API requests, data synchronization, and serves the web UI.
+- **`app/`**: 移动端优先的 Web 应用 (React + TypeScript + Vite)。
+- **`server/`**: 后端服务器 (Go + Gin + GORM + SQLite)。处理数据同步并提供 Web 服务。
+- **`desktop/`**: 桌面客户端 (Wails 3 + React)。将 `app` 代码封装为原生桌面应用。
 
-```bash
-cd server
+### 快速开始
 
-# Install dependencies
-go mod download
+请参考各个目录下的 README 获取详细说明：
 
-# Run the server (default port: 8080)
-go run main.go
-```
-
-The server will be available at `http://localhost:8080`.
-
-### 2. Running the Client App (Development)
-
-The client app is the main study interface.
-
-```bash
-cd app
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm run dev
-```
-
-The app will be available at `http://localhost:5173`.
-
-### 3. Using Docker (Recommended for Deployment)
-
-You can deploy the entire stack using Docker Compose.
-
-```bash
-cd server
-docker-compose up -d
-```
-
-## 📖 Usage Guide
-
-1.  **Register/Login:** Create an account on the server or log in.
-2.  **Create a Lesson:**
-    *   Go to the "Create" page.
-    *   Enter a title and description.
-    *   (Optional) Upload an audio file or PDF reference.
-    *   Add Flashcards (Front/Back). You can use Markdown!
-3.  **Study:**
-    *   Click on a lesson to review cards specific to that lesson.
-    *   Or click **"Review All"** on the homepage to start a global review session based on SRS priority.
-4.  **Sync:**
-    *   Click the **Sync** button (refresh icon) in the header to synchronize your local progress with the server.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-[MIT](LICENSE)
+- [移动端/Web 应用文档](app/README.md)
+- [服务器文档](server/README.md)
+- [桌面客户端文档](desktop/README.md)

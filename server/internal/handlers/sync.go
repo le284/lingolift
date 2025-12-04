@@ -130,25 +130,19 @@ func SyncHandler(c *gin.Context) {
 	} else {
 		// Incremental Sync
 
-		// Find IDs of lessons with modified cards (scoped to user)
-		var lessonIDs []string
-		db.DB.Table("flashcards").
-			Joins("JOIN lessons ON lessons.id = flashcards.lesson_id").
-			Where("flashcards.last_updated > ? AND flashcards.deleted_at = 0 AND lessons.user_id = ?", req.LastSyncTimestamp, userID).
-			Pluck("flashcards.lesson_id", &lessonIDs)
+		// Incremental Sync
 
-		fmt.Printf("Debug: Found %d modified lessons: %v\n", len(lessonIDs), lessonIDs)
+		// Subquery to find IDs of lessons with modified cards (scoped to user)
+		// We use a subquery to avoid fetching thousands of IDs and hitting the SQL variable limit (999 in SQLite)
+		subQuery := db.DB.Table("flashcards").
+			Select("lesson_id").
+			Joins("JOIN lessons ON lessons.id = flashcards.lesson_id").
+			Where("flashcards.last_updated > ? AND flashcards.deleted_at = 0 AND lessons.user_id = ?", req.LastSyncTimestamp, userID)
 
 		// Fetch lessons (New OR Modified)
-		if len(lessonIDs) > 0 {
-			db.DB.Preload("Flashcards", "deleted_at = 0").
-				Where("user_id = ? AND (created_at > ? OR id IN ?) AND deleted_at = 0", userID, req.LastSyncTimestamp, lessonIDs).
-				Find(&lessons)
-		} else {
-			db.DB.Preload("Flashcards", "deleted_at = 0").
-				Where("user_id = ? AND created_at > ? AND deleted_at = 0", userID, req.LastSyncTimestamp).
-				Find(&lessons)
-		}
+		db.DB.Preload("Flashcards", "deleted_at = 0").
+			Where("user_id = ? AND (created_at > ? OR id IN (?)) AND deleted_at = 0", userID, req.LastSyncTimestamp, subQuery).
+			Find(&lessons)
 	}
 
 	// Fetch Deleted Lessons
