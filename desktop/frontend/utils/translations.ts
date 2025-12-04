@@ -13,6 +13,8 @@ export const translations = {
     noLessons: "No Lessons Found",
     tapSync: "Tap the sync button to download lessons.",
     syncNow: "Sync Now",
+    confirmResetSync: "Are you sure you want to reset sync? This will force a full re-download.",
+    confirmDeleteLesson: "Are you sure you want to delete this lesson? This action cannot be undone.",
     lesson: {
       audio: "Audio",
       pdf: "PDF",
@@ -91,6 +93,8 @@ export const translations = {
     noLessons: "暂无课程",
     tapSync: "点击同步按钮下载最新课程。",
     syncNow: "立即同步",
+    confirmResetSync: "确定要重置同步吗？这将强制重新下载所有内容。",
+    confirmDeleteLesson: "确定要删除这个课程吗？此操作无法撤销。",
     lesson: {
       audio: "听力",
       pdf: "文档",
