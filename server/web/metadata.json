@@ -1,0 +1,5 @@
+{
+  "name": "LingoLift",
+  "description": "A comprehensive language learning companion. Manage reading lists, listen to audio tracks, read PDFs, and practice vocabulary with flashcards. Supports offline mode and AI-powered flashcard generation.",
+  "requestFramePermissions": []
+}
