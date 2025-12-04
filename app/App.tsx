@@ -22,7 +22,6 @@ import { Lesson, PlayMode, Flashcard } from './types';
 import { saveLesson, getAllLessons, getLesson, deleteLesson } from './services/db';
 import { AudioPlayer } from './components/AudioPlayer';
 import { FlashcardGame } from './components/FlashcardGame';
-import { IOSInstallPrompt } from './components/IOSInstallPrompt';
 import { PDFViewer } from './components/PDFViewer';
 import { createInitialSRSState } from './services/srs';
 import { syncLessons, resetSyncTime } from './services/sync';
@@ -32,6 +31,7 @@ import { Vocabulary } from './pages/Vocabulary';
 import { translations, Language } from './utils/translations';
 import { Markdown } from './components/Markdown';
 import { LanguageContext, useLanguage } from './contexts/LanguageContext';
+import { useSwipeNavigation } from './hooks/useSwipeNavigation';
 
 // --- Contexts ---
 // Moved to contexts/LanguageContext.tsx
@@ -169,7 +169,7 @@ const LessonList: React.FC = () => {
 
   return (
     <div className="pb-32 min-h-screen bg-slate-50">
-      <header className="bg-white/80 backdrop-blur-md p-6 sticky top-0 z-10 border-b border-slate-100 shadow-sm">
+      <header className="bg-white/80 backdrop-blur-md px-6 pb-6 pt-[calc(1.5rem+env(safe-area-inset-top))] sticky top-0 z-10 border-b border-slate-100 shadow-sm">
         <div className="flex justify-between items-center max-w-2xl mx-auto">
           <div>
             <h1 className="text-2xl font-bold text-slate-900">{t.appTitle}</h1>
@@ -502,7 +502,7 @@ const GlobalReview: React.FC = () => {
 
   return (
     <div className="h-screen bg-slate-50 flex flex-col">
-      <div className="p-4 bg-white shadow-sm flex flex-col gap-4">
+      <div className="px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] bg-white shadow-sm flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <button onClick={() => navigate(-1)} className="p-2 text-slate-500"><ArrowLeft /></button>
           <h1 className="font-bold text-lg">{t.reviewAll}</h1>
@@ -655,7 +655,7 @@ const LessonDetail: React.FC<{ playerControls: PlayerControls }> = ({ playerCont
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      <header className="bg-white/80 backdrop-blur-md p-4 border-b border-slate-100 flex justify-between items-center sticky top-0 z-10 shadow-sm">
+      <header className="bg-white/80 backdrop-blur-md px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] border-b border-slate-100 flex justify-between items-center sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-4">
           <Link to="/" className="p-2 text-slate-600 hover:bg-slate-50 rounded-full">
             <ArrowLeft size={24} />
@@ -847,14 +847,14 @@ const LessonDetail: React.FC<{ playerControls: PlayerControls }> = ({ playerCont
 
 // --- Main App Wrapper ---
 
-const App: React.FC = () => {
-  const [lang, setLang] = useState<Language>('en');
+const AppContent: React.FC = () => {
+  useSwipeNavigation();
+  const { lang, toggleLang, t } = useLanguage();
+
   const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
   const [currentTrackTitle, setCurrentTrackTitle] = useState<string>('');
   const [isPlaying, setIsPlaying] = useState(false);
   const [playMode, setPlayMode] = useState<PlayMode>(PlayMode.SEQUENTIAL);
-
-  const toggleLang = () => setLang(prev => prev === 'en' ? 'zh' : 'en');
 
   // Player Logic
   const play = useCallback((url: string, title: string) => {
@@ -878,41 +878,49 @@ const App: React.FC = () => {
   }, []);
 
   return (
+    <div className="font-sans text-slate-900">
+      <Routes>
+        <Route path="/" element={<LessonList />} />
+        <Route path="/review" element={<GlobalReview />} />
+        <Route path="/vocabulary" element={<Vocabulary />} />
+        <Route
+          path="/lesson/:id"
+          element={
+            <LessonDetail
+              playerControls={{
+                play,
+                pause,
+                isPlaying,
+                currentUrl: currentAudioUrl,
+                mode: playMode,
+                toggleMode: () => setPlayMode(m => m === PlayMode.SEQUENTIAL ? PlayMode.LOOP_ONE : PlayMode.SEQUENTIAL)
+              }}
+            />
+          }
+        />
+      </Routes>
+
+      <AudioPlayer
+        audioUrl={currentAudioUrl}
+        title={currentTrackTitle}
+        isPlaying={isPlaying}
+        onTogglePlay={togglePlay}
+        onNext={handleNext}
+        mode={playMode}
+        onToggleMode={() => setPlayMode(m => m === PlayMode.SEQUENTIAL ? PlayMode.LOOP_ONE : PlayMode.SEQUENTIAL)}
+      />
+    </div>
+  );
+};
+
+const App: React.FC = () => {
+  const [lang, setLang] = useState<Language>('en');
+  const toggleLang = () => setLang(prev => prev === 'en' ? 'zh' : 'en');
+
+  return (
     <LanguageContext.Provider value={{ lang, toggleLang, t: translations[lang] }}>
       <HashRouter>
-        <div className="font-sans text-slate-900">
-          <IOSInstallPrompt />
-          <Routes>
-            <Route path="/" element={<LessonList />} />
-            <Route path="/review" element={<GlobalReview />} />
-            <Route path="/vocabulary" element={<Vocabulary />} />
-            <Route
-              path="/lesson/:id"
-              element={
-                <LessonDetail
-                  playerControls={{
-                    play,
-                    pause,
-                    isPlaying,
-                    currentUrl: currentAudioUrl,
-                    mode: playMode,
-                    toggleMode: () => setPlayMode(m => m === PlayMode.SEQUENTIAL ? PlayMode.LOOP_ONE : PlayMode.SEQUENTIAL)
-                  }}
-                />
-              }
-            />
-          </Routes>
-
-          <AudioPlayer
-            audioUrl={currentAudioUrl}
-            title={currentTrackTitle}
-            isPlaying={isPlaying}
-            onTogglePlay={togglePlay}
-            onNext={handleNext}
-            mode={playMode}
-            onToggleMode={() => setPlayMode(m => m === PlayMode.SEQUENTIAL ? PlayMode.LOOP_ONE : PlayMode.SEQUENTIAL)}
-          />
-        </div>
+        <AppContent />
       </HashRouter>
     </LanguageContext.Provider>
   );

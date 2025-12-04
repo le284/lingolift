@@ -39,6 +39,24 @@ The output will be in the `dist` directory.
 
 The app connects to the server URL stored in `localStorage` (key: `lingolift_server_url`). Default is `http://localhost:8080`.
 
+### iOS Development (Capacitor)
+
+1.  **Initialize**:
+    ```bash
+    npm install
+    npx cap sync
+    ```
+
+2.  **Open in Xcode**:
+    ```bash
+    npx cap open ios
+    ```
+
+3.  **Run**:
+    Select your simulator or device in Xcode and press the Run button (Play icon).
+
+**Note:** You must have Xcode installed and properly configured (`xcode-select`). If you encounter `pod install` errors, try running `xcodebuild -runFirstLaunch` or reinstalling CocoaPods.
+
 ---
 
 <a name="chinese"></a>
@@ -49,6 +67,7 @@ The app connects to the server URL stored in `localStorage` (key: `lingolift_ser
 ### 前置要求
 
 - **Node.js**: 18 或更高版本
+- **Xcode**: (仅 iOS 开发需要)
 
 ### 开发
 
@@ -77,3 +96,21 @@ npm run build
 ### 配置
 
 应用连接到存储在 `localStorage` 中的服务器 URL（键名：`lingolift_server_url`）。默认为 `http://localhost:8080`。
+
+### iOS 开发 (Capacitor)
+
+1.  **初始化**:
+    ```bash
+    npm install
+    npx cap sync
+    ```
+
+2.  **在 Xcode 中打开**:
+    ```bash
+    npx cap open ios
+    ```
+
+3.  **运行**:
+    在 Xcode 中选择模拟器或设备，然后点击运行按钮（播放图标）。
+
+**注意:** 您必须安装并正确配置 Xcode (`xcode-select`)。如果遇到 `pod install` 错误，请尝试运行 `xcodebuild -runFirstLaunch` 或重新安装 CocoaPods。

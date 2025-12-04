@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { PlayMode } from './types';
 import { AudioPlayer } from './components/AudioPlayer';
-import { IOSInstallPrompt } from './components/IOSInstallPrompt';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { translations } from './utils/translations';
@@ -62,7 +61,6 @@ function AppContent() {
 
   return (
     <div className="font-sans text-slate-900">
-      <IOSInstallPrompt />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

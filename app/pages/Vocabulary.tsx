@@ -152,7 +152,7 @@ export const Vocabulary: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
-            <header className="bg-white p-4 shadow-sm sticky top-0 z-10">
+            <header className="bg-white px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] shadow-sm sticky top-0 z-10">
                 <div className="flex items-center justify-between max-w-2xl mx-auto">
                     <div className="flex items-center gap-4">
                         <button onClick={() => navigate(-1)} className="p-2 text-slate-500"><ArrowLeft /></button>
