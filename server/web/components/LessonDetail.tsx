@@ -226,14 +226,14 @@ export const LessonDetail: React.FC<{ playerControls: PlayerControls }> = ({ pla
                         <div className="bg-amber-50 border border-amber-100 p-5 rounded-xl">
                             <h3 className="font-bold text-amber-900 mb-2">{t.lesson.vocab}</h3>
                             <div className="flex gap-4 text-sm text-amber-800 flex-col sm:flex-row mb-4">
-                                <span>• {lesson.flashcards.length} {t.lesson.vocabCount}</span>
-                                <span>• {lesson.flashcards.filter(c => c.isUserCreated).length} {t.lesson.addedByYou}</span>
+                                <span>• {lesson.flashcards?.length || 0} {t.lesson.vocabCount}</span>
+                                <span>• {lesson.flashcards?.filter(c => c.isUserCreated).length || 0} {t.lesson.addedByYou}</span>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {lesson.flashcards.slice(0, 5).map(fc => (
+                                {(lesson.flashcards || []).slice(0, 5).map(fc => (
                                     <span key={fc.id} className="text-xs bg-white px-2 py-1 rounded border border-amber-200 text-amber-900">{fc.front.substring(0, 15)}...</span>
                                 ))}
-                                {lesson.flashcards.length > 5 && <span className="text-xs text-amber-600 self-center">+{lesson.flashcards.length - 5} more</span>}
+                                {(lesson.flashcards?.length || 0) > 5 && <span className="text-xs text-amber-600 self-center">+{lesson.flashcards.length - 5} more</span>}
                             </div>
                         </div>
                     </div>
@@ -259,7 +259,7 @@ export const LessonDetail: React.FC<{ playerControls: PlayerControls }> = ({ pla
                 {activeTab === 'vocab' && (
                     <div className="pb-24 animate-fade-in">
                         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                            {lesson.flashcards.length === 0 ? (
+                            {(lesson.flashcards?.length || 0) === 0 ? (
                                 <div className="p-8 text-center text-slate-500">{t.game.noCards}</div>
                             ) : (
                                 <div className="divide-y divide-slate-100">
