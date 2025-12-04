@@ -114,7 +114,7 @@ export const LessonDetail: React.FC<{ playerControls: PlayerControls }> = ({ pla
             ...createInitialSRSState()
         };
 
-        const updatedLesson = { ...lesson, flashcards: [...lesson.flashcards, newCard] };
+        const updatedLesson = { ...lesson, flashcards: [...(lesson.flashcards || []), newCard] };
         setLesson(updatedLesson);
         await saveLesson(updatedLesson);
 
