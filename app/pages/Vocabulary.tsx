@@ -7,6 +7,8 @@ import { Markdown } from '../components/Markdown';
 import { createInitialSRSState } from '../services/srs';
 import { useLanguage } from '../contexts/LanguageContext';
 
+import { generateUUID } from '../utils/uuid';
+
 export const Vocabulary: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useLanguage();
@@ -114,7 +116,7 @@ export const Vocabulary: React.FC = () => {
         if (!lesson) return;
 
         const newCard: Flashcard = {
-            id: crypto.randomUUID(),
+            id: generateUUID(),
             front: newFront,
             back: newBack,
             isUserCreated: true,

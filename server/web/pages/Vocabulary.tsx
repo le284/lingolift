@@ -9,6 +9,8 @@ import { createInitialSRSState } from '../services/srs';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 
+import { generateUUID } from '../utils/uuid';
+
 export const Vocabulary: React.FC = () => {
     const navigate = useNavigate();
     const { t, lang, toggleLang } = useLanguage();
@@ -139,7 +141,7 @@ export const Vocabulary: React.FC = () => {
             if (!lesson) return;
 
             const newCard = {
-                id: crypto.randomUUID(), // Temporary ID, server might overwrite or use it
+                id: generateUUID(), // Use safe UUID generator
                 lessonId: selectedLessonId, // Important for server
                 front: newFront,
                 back: newBack,
