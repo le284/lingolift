@@ -18,6 +18,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 import { Markdown } from './Markdown';
 import { createInitialSRSState } from '../services/srs';
+import { generateUUID } from '../utils/uuid';
 
 // Interface to props for the AudioPlayer in the Detail view
 export interface PlayerControls {
@@ -106,7 +107,7 @@ export const LessonDetail: React.FC<{ playerControls: PlayerControls }> = ({ pla
         if (!lesson || !newFront.trim() || !newBack.trim()) return;
 
         const newCard: Flashcard = {
-            id: crypto.randomUUID(),
+            id: generateUUID(),
             front: newFront,
             back: newBack,
             isUserCreated: true, // Mark as user-created so sync preserves it
