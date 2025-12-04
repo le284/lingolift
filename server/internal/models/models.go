@@ -27,6 +27,7 @@ type Lesson struct {
 	MarkdownContent string      `json:"markdownContent"`
 	Tags            []string    `json:"tags" gorm:"serializer:json"`
 	DeletedAt       int64       `json:"deletedAt"`
+	LastUpdated     int64       `json:"lastUpdated"`
 	Flashcards      []Flashcard `gorm:"foreignKey:LessonID" json:"flashcards"`
 }
 

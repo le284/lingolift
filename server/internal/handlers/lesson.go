@@ -39,6 +39,7 @@ func CreateLessonHandler(c *gin.Context) {
 		Title:       title,
 		Description: description,
 		CreatedAt:   time.Now().UnixMilli(),
+		LastUpdated: time.Now().UnixMilli(),
 		Flashcards:  []models.Flashcard{}, // Empty initially
 	}
 
@@ -170,6 +171,8 @@ func UpdateLessonHandler(c *gin.Context) {
 	} else {
 		lesson.Tags = []string{}
 	}
+
+	lesson.LastUpdated = time.Now().UnixMilli()
 
 	if err := db.DB.Save(&lesson).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update lesson"})

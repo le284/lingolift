@@ -139,9 +139,9 @@ func SyncHandler(c *gin.Context) {
 			Joins("JOIN lessons ON lessons.id = flashcards.lesson_id").
 			Where("flashcards.last_updated > ? AND flashcards.deleted_at = 0 AND lessons.user_id = ?", req.LastSyncTimestamp, userID)
 
-		// Fetch lessons (New OR Modified)
+		// Fetch lessons (New OR Modified OR Modified Flashcards)
 		db.DB.Preload("Flashcards", "deleted_at = 0").
-			Where("user_id = ? AND (created_at > ? OR id IN (?)) AND deleted_at = 0", userID, req.LastSyncTimestamp, subQuery).
+			Where("user_id = ? AND (created_at > ? OR last_updated > ? OR id IN (?)) AND deleted_at = 0", userID, req.LastSyncTimestamp, req.LastSyncTimestamp, subQuery).
 			Find(&lessons)
 	}
 
@@ -188,12 +188,15 @@ func SyncHandler(c *gin.Context) {
 	if remoteProgress == nil {
 		remoteProgress = make([]models.CardProgress, 0)
 	}
-	if deletedLessonIDs == nil {
-		deletedLessonIDs = make([]string, 0)
+	// Initialize slices if nil (though make() ensures they aren't nil, this is just for safety/clarity if logic changes)
+	if lessons == nil {
+		lessons = make([]models.Lesson, 0)
 	}
-	if deletedCardIDs == nil {
-		deletedCardIDs = make([]string, 0)
+	if remoteProgress == nil {
+		remoteProgress = make([]models.CardProgress, 0)
 	}
+	// deletedLessonIDs and deletedCardIDs are initialized with make(), so they are never nil.
+	// We can skip the checks.
 
 	response := models.SyncResponse{
 		ServerTimestamp: time.Now().UnixMilli(),

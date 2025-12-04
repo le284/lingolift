@@ -19,6 +19,7 @@ export interface Lesson {
   title: string;
   description?: string;
   createdAt: number;
+  lastUpdated?: number;
   tags?: string[];
 
   // Media handling
